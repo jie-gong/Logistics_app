@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <item
+            android:id="@+id/zhuye"
+            android:title="主页" />
+        <item
+            android:id="@+id/chakuaidi"
+            android:title="查快递" />
+        <item
+            android:id="@+id/jkd"
+            android:title="寄快递" />
+        <item
+            android:id="@+id/qiehuanzhiye"
+            android:title="切换职业" />
+        <item
+            android:id="@+id/tc"
+            android:title="退出登录" />
+    </group>
+</menu>
