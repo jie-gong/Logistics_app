@@ -25,7 +25,7 @@ public class SPUtil {
     public void setSp(Context context, String sp) {
         SharedPreferences pref = context.getSharedPreferences("userInfo", MODE_PRIVATE);//将内容存放到userinfo的文档内
         editor = pref.edit();
-        editor.putString(sp, sp);
+        editor.putString("id", sp);
         editor.commit();
     }
 

@@ -1,5 +1,6 @@
 package com.example.logistics.m1;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +16,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.logistics.R;
 import com.example.logistics.adapter.F1_adapter;
+import com.example.logistics.admin.TimeUpDd;
 import com.example.logistics.bean.F1_Bean;
 import com.example.logistics.http.OkHttpTo;
 import com.example.logistics.util.SPUtil;
@@ -26,7 +29,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @user 公杰
@@ -39,6 +41,8 @@ public class M1_fragment1 extends Fragment {
     private Button but2;
     private ListView listItem;
     private TextView t1;
+    private SwipeRefreshLayout xiala;
+    private TextView title1;
 
 
     @Override
@@ -55,6 +59,18 @@ public class M1_fragment1 extends Fragment {
             but2.setVisibility(View.GONE);
             getClient();
         }
+        xiala.setColorSchemeColors(Color.parseColor("#ff0000"), Color.parseColor("#00ff00"));
+        xiala.setProgressBackgroundColorSchemeColor(Color.parseColor("#0000ff"));
+        xiala.setOnRefreshListener(() -> {
+            getClient();
+            //判断是否在刷新
+            Toast.makeText(requireContext(), "刷新完成", Toast.LENGTH_SHORT).show();
+            xiala.postDelayed(() -> {
+                //关闭刷新
+                xiala.setRefreshing(false);
+            }, 100);
+        });
+
         but.setOnClickListener(view1 -> {
             View inflate = View.inflate(requireContext(), R.layout.login, null);
             AlertDialog show = new AlertDialog.Builder(requireContext()).setView(inflate).show();
@@ -176,6 +192,8 @@ public class M1_fragment1 extends Fragment {
         but2 = getView().findViewById(R.id.but2);
         listItem = getView().findViewById(R.id.list_item);
         t1 = getView().findViewById(R.id.title1);
+        xiala = getView().findViewById(R.id.xiala);
+        title1 = getView().findViewById(R.id.title1);
     }
 
 }

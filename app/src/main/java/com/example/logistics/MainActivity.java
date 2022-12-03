@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         CeB();
         spUtil = new SPUtil();
         String admin = spUtil.getSp(this, "admin");
+        String id = spUtil.getSp(this, "id");
         if (admin.equals("")) {
             fragments.add(new M1_fragment1());
             fragments.add(new M1_fragment2());
@@ -83,9 +84,10 @@ public class MainActivity extends AppCompatActivity {
                     super.onPageScrollStateChanged(state);
                 }
             });
-        } else {
+        }else {
             Intent intent = new Intent(this, Admin.class);
             startActivity(intent);
+            finish();
         }
 
     }
@@ -112,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
                     intent = new Intent(MainActivity.this, UserLogin.class);
                     startActivity(intent);
                     finish();
-
             }
             return true;
         });

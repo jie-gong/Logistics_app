@@ -3,6 +3,7 @@ package com.example.logistics.login;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,11 +13,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.logistics.MainActivity;
 import com.example.logistics.R;
+import com.example.logistics.admin.Qbdd;
 import com.example.logistics.admin.TimeUpDd;
+import com.example.logistics.http.OkHttpLo;
 import com.example.logistics.http.OkHttpTo;
 import com.example.logistics.util.SPUtil;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Admin extends AppCompatActivity {
@@ -27,6 +29,8 @@ public class Admin extends AppCompatActivity {
     private Button but1;
     private SPUtil spUtil;
     private SwipeRefreshLayout xiala;
+    private TextView math2;
+    private Button but2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +42,7 @@ public class Admin extends AppCompatActivity {
         xiala.setProgressBackgroundColorSchemeColor(Color.parseColor("#0000ff"));
         xiala.setOnRefreshListener(() -> {
             getMath();
+            getMath2();
             //判断是否在刷新
             Toast.makeText(Admin.this, "刷新完成", Toast.LENGTH_SHORT).show();
             xiala.postDelayed(() -> {
@@ -56,11 +61,27 @@ public class Admin extends AppCompatActivity {
             finish();
         });
         getMath();
+        getMath2();
         but1.setOnClickListener(view -> {
             Intent intent = new Intent(this, TimeUpDd.class);
             startActivity(intent);
         });
+        but2.setOnClickListener(view -> {
+            Intent intent = new Intent(Admin.this, Qbdd.class);
+            startActivity(intent);
+        });
 
+    }
+
+    private void getMath2() {
+        new OkHttpTo()
+                .setUrl("/admin/selectAll")
+                .setType("GET")
+                .setOkHttpLo(jsonObject -> {
+                    if (jsonObject.optString("code").equals("200")) {
+                        math2.setText("当前共有" + jsonObject.optString("total") + "个订单");
+                    }
+                }).start();
     }
 
     //显示订单数量
@@ -76,11 +97,29 @@ public class Admin extends AppCompatActivity {
                 }).start();
     }
 
+    private long time = 0;
+
+    //双击退出
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        long mNowTime = System.currentTimeMillis();/**  获取第一次按键时间*/
+        if ((mNowTime - time) > 1000) {
+            Toast.makeText(this, "再按一次退出", Toast.LENGTH_SHORT).show();
+            time = mNowTime;
+        } else {
+            finish();
+            System.exit(0);
+        }
+        return true;
+    }
+
     private void initView() {
         title1 = findViewById(R.id.title1);
         tvGrzx = findViewById(R.id.tv_grzx);
         math = findViewById(R.id.math);
         but1 = findViewById(R.id.but1);
         xiala = findViewById(R.id.xiala);
+        math2 = findViewById(R.id.math2);
+        but2 = findViewById(R.id.but2);
     }
 }
